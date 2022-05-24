@@ -1,32 +1,43 @@
-﻿using ImageShare.Web.Models;
+﻿using ImageShare.Core.Models;
+using ImageShare.Services;
+using ImageShare.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace ImageShare.Web.Controllers
+namespace ImageShare.Web.Controllers;
+
+[Authorize]
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+    private readonly UserService _userService;
+
+    public HomeController(ILogger<HomeController> logger, UserService userService)
     {
-        private readonly ILogger<HomeController> _logger;
+        _logger = logger;
+        _userService = userService;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
+    public IActionResult Index(Guid libraryId, Guid albumId)
+    {
+        var vm = new ImagesViewModel
         {
-            _logger = logger;
-        }
+            LibraryId = libraryId,
+            AlbumId = albumId
+        };
+        return View(vm);
+    }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public IActionResult Privacy()
+    {
+        return View();
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

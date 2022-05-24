@@ -14,10 +14,12 @@ namespace ImageShare.Data.Configurations
         public void Configure(EntityTypeBuilder<Image> builder)
         {
             builder.ToTable("Images");
-                   
+            builder.HasOne(i => i.Owner).WithMany(u => u.Images);
+
+            builder.HasMany(i => i.Libraries).WithMany(l => l.Images)
+                .UsingEntity("LibraryImage").ToTable("LibraryImages");
             builder.HasMany(i=>i.Albums).WithMany(i => i.Images)
                 .UsingEntity("AlbumImage").ToTable("AlbumImages");
-            builder.HasOne(i => i.Owner).WithMany(u => u.Images);
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿@model CreateLibraryViewModel
+<div class="row">
+    <div class="col-md-6 offset-md-3 p-3" style="max-width:600px;">
+        <form asp-for="Title" asp-action="Create" asp-controller="Libraries" method="post">
+            <div class="mb-3">
+                <label for="TitleInput" class="form-label">Title</label>
+                <input type="text" class="form-control" id="TitleInput" asp-for="Title">
+            </div>
+            <div class="mb-3">
+                <label for="DescriptionInput" class="form-label">Description</label>
+                <input type="text" class="form-control" id="DescriptionInput" asp-for="Description">
+            </div>
+            <div class="mb-3">
+                <label for="TagsInput" class="form-label">Tags</label>
+                <input type="text" class="form-control" id="TagsInput" aria-describedby="TagsHelp" asp-for="TagsText">
+                <div id="TagsHelp" class="form-text" style="color:aliceblue">a comma-seperated list of tags</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

@@ -36,20 +36,20 @@ namespace ImageShare.Data.Configurations
                          j.ToTable("AlbumSubscribers");
                      });
 
-            builder.HasMany(u => u.SubscribedCollections)
-                   .WithMany(c => c.Subscribers).UsingEntity<CollectionSubscriber>(
+            builder.HasMany(u => u.SubscribedLibraries)
+                   .WithMany(c => c.Subscribers).UsingEntity<LibrarySubscriber>(
                     j => j
-                       .HasOne(cs => cs.Collection)
-                       .WithMany(c => c.CollectionSubscribers)
-                       .HasForeignKey(cs => cs.CollectionId),
+                       .HasOne(cs => cs.Library)
+                       .WithMany(c => c.LibrarySubscribers)
+                       .HasForeignKey(cs => cs.LibraryId),
                    j => j
                        .HasOne(cs => cs.Subscriber)
-                       .WithMany(s => s.CollectionSubscribers)
+                       .WithMany(s => s.LibrarySubscribers)
                        .HasForeignKey(cs => cs.SubscriberId),
                    j =>
                    {
-                       j.HasKey(t => new { t.CollectionId, t.SubscriberId });
-                       j.ToTable("CollectionSubscribers");
+                       j.HasKey(t => new { t.LibraryId, t.SubscriberId });
+                       j.ToTable("LibrarySubscribers");
                    });
         }
     }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImageShare.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220502220137_Initial")]
-    partial class Initial
+    [Migration("20220519012356_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,51 +54,6 @@ namespace ImageShare.Data.Migrations
                     b.ToTable("AlbumTags", (string)null);
                 });
 
-            modelBuilder.Entity("CollectionAlbum", b =>
-                {
-                    b.Property<Guid>("AlbumsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CollectionsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("AlbumsId", "CollectionsId");
-
-                    b.HasIndex("CollectionsId");
-
-                    b.ToTable("CollectionAlbums", (string)null);
-                });
-
-            modelBuilder.Entity("CollectionImage", b =>
-                {
-                    b.Property<Guid>("CollectionsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ImagesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CollectionsId", "ImagesId");
-
-                    b.HasIndex("ImagesId");
-
-                    b.ToTable("CollectionImages", (string)null);
-                });
-
-            modelBuilder.Entity("CollectionTag", b =>
-                {
-                    b.Property<Guid>("CollectionsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("TagsTagText")
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("CollectionsId", "TagsTagText");
-
-                    b.HasIndex("TagsTagText");
-
-                    b.ToTable("CollectionTags", (string)null);
-                });
-
             modelBuilder.Entity("ImageShare.Core.Album", b =>
                 {
                     b.Property<Guid>("Id")
@@ -120,27 +75,6 @@ namespace ImageShare.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Albums");
-                });
-
-            modelBuilder.Entity("ImageShare.Core.Collection", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Collections");
                 });
 
             modelBuilder.Entity("ImageShare.Core.Image", b =>
@@ -179,6 +113,27 @@ namespace ImageShare.Data.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Images", (string)null);
+                });
+
+            modelBuilder.Entity("ImageShare.Core.Library", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Libraries");
                 });
 
             modelBuilder.Entity("ImageShare.Core.Models.AlbumSubscriber", b =>
@@ -268,9 +223,24 @@ namespace ImageShare.Data.Migrations
                     b.ToTable("AppUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ImageShare.Core.Models.CollectionSubscriber", b =>
+            modelBuilder.Entity("ImageShare.Core.Models.LibraryAlbum", b =>
                 {
-                    b.Property<Guid>("CollectionId")
+                    b.Property<Guid>("LibraryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AlbumId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LibraryId", "AlbumId");
+
+                    b.HasIndex("AlbumId");
+
+                    b.ToTable("LibraryAlbums", (string)null);
+                });
+
+            modelBuilder.Entity("ImageShare.Core.Models.LibrarySubscriber", b =>
+                {
+                    b.Property<Guid>("LibraryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SubscriberId")
@@ -282,11 +252,11 @@ namespace ImageShare.Data.Migrations
                     b.Property<bool>("IsOwner")
                         .HasColumnType("bit");
 
-                    b.HasKey("CollectionId", "SubscriberId");
+                    b.HasKey("LibraryId", "SubscriberId");
 
                     b.HasIndex("SubscriberId");
 
-                    b.ToTable("CollectionSubscribers", (string)null);
+                    b.ToTable("LibrarySubscribers", (string)null);
                 });
 
             modelBuilder.Entity("ImageShare.Core.Tag", b =>
@@ -313,6 +283,36 @@ namespace ImageShare.Data.Migrations
                     b.HasIndex("TagsTagText");
 
                     b.ToTable("ImageTags", (string)null);
+                });
+
+            modelBuilder.Entity("LibraryImage", b =>
+                {
+                    b.Property<Guid>("ImagesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LibrariesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ImagesId", "LibrariesId");
+
+                    b.HasIndex("LibrariesId");
+
+                    b.ToTable("LibraryImages", (string)null);
+                });
+
+            modelBuilder.Entity("LibraryTag", b =>
+                {
+                    b.Property<Guid>("LibrariesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TagsTagText")
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("LibrariesId", "TagsTagText");
+
+                    b.HasIndex("TagsTagText");
+
+                    b.ToTable("LibraryTags", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -409,51 +409,6 @@ namespace ImageShare.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CollectionAlbum", b =>
-                {
-                    b.HasOne("ImageShare.Core.Album", null)
-                        .WithMany()
-                        .HasForeignKey("AlbumsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ImageShare.Core.Collection", null)
-                        .WithMany()
-                        .HasForeignKey("CollectionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CollectionImage", b =>
-                {
-                    b.HasOne("ImageShare.Core.Collection", null)
-                        .WithMany()
-                        .HasForeignKey("CollectionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ImageShare.Core.Image", null)
-                        .WithMany()
-                        .HasForeignKey("ImagesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CollectionTag", b =>
-                {
-                    b.HasOne("ImageShare.Core.Collection", null)
-                        .WithMany()
-                        .HasForeignKey("CollectionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ImageShare.Core.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsTagText")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ImageShare.Core.Image", b =>
                 {
                     b.HasOne("ImageShare.Core.Models.AppUser", "Owner")
@@ -484,21 +439,40 @@ namespace ImageShare.Data.Migrations
                     b.Navigation("Subscriber");
                 });
 
-            modelBuilder.Entity("ImageShare.Core.Models.CollectionSubscriber", b =>
+            modelBuilder.Entity("ImageShare.Core.Models.LibraryAlbum", b =>
                 {
-                    b.HasOne("ImageShare.Core.Collection", "Collection")
-                        .WithMany("CollectionSubscribers")
-                        .HasForeignKey("CollectionId")
+                    b.HasOne("ImageShare.Core.Album", "Album")
+                        .WithMany("LibraryAlbums")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ImageShare.Core.Library", "Library")
+                        .WithMany("LibraryAlbums")
+                        .HasForeignKey("LibraryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Album");
+
+                    b.Navigation("Library");
+                });
+
+            modelBuilder.Entity("ImageShare.Core.Models.LibrarySubscriber", b =>
+                {
+                    b.HasOne("ImageShare.Core.Library", "Library")
+                        .WithMany("LibrarySubscribers")
+                        .HasForeignKey("LibraryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ImageShare.Core.Models.AppUser", "Subscriber")
-                        .WithMany("CollectionSubscribers")
+                        .WithMany("LibrarySubscribers")
                         .HasForeignKey("SubscriberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Collection");
+                    b.Navigation("Library");
 
                     b.Navigation("Subscriber");
                 });
@@ -508,6 +482,36 @@ namespace ImageShare.Data.Migrations
                     b.HasOne("ImageShare.Core.Image", null)
                         .WithMany()
                         .HasForeignKey("ImagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ImageShare.Core.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsTagText")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LibraryImage", b =>
+                {
+                    b.HasOne("ImageShare.Core.Image", null)
+                        .WithMany()
+                        .HasForeignKey("ImagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ImageShare.Core.Library", null)
+                        .WithMany()
+                        .HasForeignKey("LibrariesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LibraryTag", b =>
+                {
+                    b.HasOne("ImageShare.Core.Library", null)
+                        .WithMany()
+                        .HasForeignKey("LibrariesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -548,20 +552,24 @@ namespace ImageShare.Data.Migrations
             modelBuilder.Entity("ImageShare.Core.Album", b =>
                 {
                     b.Navigation("AlbumSubscribers");
+
+                    b.Navigation("LibraryAlbums");
                 });
 
-            modelBuilder.Entity("ImageShare.Core.Collection", b =>
+            modelBuilder.Entity("ImageShare.Core.Library", b =>
                 {
-                    b.Navigation("CollectionSubscribers");
+                    b.Navigation("LibraryAlbums");
+
+                    b.Navigation("LibrarySubscribers");
                 });
 
             modelBuilder.Entity("ImageShare.Core.Models.AppUser", b =>
                 {
                     b.Navigation("AlbumSubscribers");
 
-                    b.Navigation("CollectionSubscribers");
-
                     b.Navigation("Images");
+
+                    b.Navigation("LibrarySubscribers");
                 });
 #pragma warning restore 612, 618
         }

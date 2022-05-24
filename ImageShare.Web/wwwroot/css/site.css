@@ -1,10 +1,20 @@
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 18px;
   }
 }
 
@@ -15,4 +25,53 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.navbar {
+    background-image: url('/images/bg-00.png');
+    background-repeat: repeat;
+}
+
+.navbar-menu-header {
+    height: 80px;
+    font-family: permanent-marker, sans-serif;
+    font-size: 2em;
+    transition: ease;
+    color: aliceblue;
+    box-shadow: 10px 10px 15px blue;
+    border: groove black;
+}
+
+a.navbar-brand {
+    height: 80%;
+    padding-right: 30px;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    color: aliceblue;
+    font-family: permanent-marker, sans-serif;
+    font-size: 3rem;
+    text-shadow: 10px 10px 15px black ;
+
+}
+
+.nav-link {
+    color: aliceblue;
+}
+
+main {
+    color: aliceblue;
+    background-image:url('/images/bg-06.png');
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.imageshare-img {
+    background-color: transparent;
+    border-radius: 4%;
+    animation: fade-in 1s ease forwards;
 }

@@ -9,10 +9,16 @@ namespace ImageShare.Core.Models
 {
     public class AppUser : IdentityUser<Guid>
     {
-        public List<Image> Images { get; set; } = null!;
-        public List<Album> SubscribedAlbums { get; set; } = null!;
-        public List<AlbumSubscriber> AlbumSubscribers { get; set; } = null!;
-        public List<Collection> SubscribedCollections { get; set; } = null!;
-        public  List<CollectionSubscriber> CollectionSubscribers { get; set; } = null!;
+        public AppUser() { }
+        public AppUser(string email) { UserName = email; Email = email; }
+
+        public virtual List<Image> Images { get; set; } = null!;
+        public virtual List<Album> SubscribedAlbums { get; set; } = null!;
+        public virtual List<Library> SubscribedLibraries { get; set; } = null!;
+        
+        // join models
+        public virtual List<AlbumSubscriber> AlbumSubscribers { get; set; } = null!;
+        public virtual List<LibrarySubscriber> LibrarySubscribers { get; set; } = null!;
+   
     }
 }

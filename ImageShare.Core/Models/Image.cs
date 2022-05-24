@@ -22,10 +22,10 @@ namespace ImageShare.Core
 
         public DateTime Created { get; set; }
 
-        public AppUser Owner { get; set; } = null!;
+        public virtual AppUser Owner { get; set; } = null!;
         public Guid OwnerId { get; set; }
-        public List<Collection> Collections { get; set; } = null!;
-        public List<Album> Albums { get; set; } = null!;
-        public List<Tag> Tags { get; set; } = null!;
+        public virtual List<Library> Libraries { get; set; } = null!;
+        public virtual List<Album> Albums { get; set; } = null!;
+        public virtual List<Tag> Tags { get; set; } = null!;
     }
 }

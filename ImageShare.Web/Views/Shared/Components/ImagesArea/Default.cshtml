@@ -1,0 +1,81 @@
+﻿@using ImageShare.Core.Models
+@model ImageShare.Web.Models.ImagesViewModel
+
+<form asp-action="Upload" class="dropzone" style="margin-top:20px;" id="image-dropzone" asp-controller="Images" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="libraryId" value="@Model.LibraryId" />
+    <input type="hidden" name="albumId" value="@Model.AlbumId" />
+    <div>
+        <div class="dz-default dz-message">
+            Drop image(s) here.
+        </div>
+    </div>
+</form>
+<container>
+    <div class="row">
+        <div class="col-sm-4 p-1" id="img-col-1">
+            @* @for (int i = 0; i < Model.Images.Count / 3; i++)
+            {
+            <img style="width:100%; border-radius:5%;" class="img-responsive p-1" src="@Model.Images[i].Url" />
+            }*@
+        </div>
+        <div class="col-sm-4 p-1" id="img-col-2">
+            @*@for (int i = Model.Images.Count / 3; i < Model.Images.Count * 2 / 3; i++)
+            {
+            <img style="width:100%; border-radius:5%;" class="img-responsive p-1" src="@Model.Images[i].Url" />
+            }*@
+        </div>
+        <div class="col-sm-4 p-1" id="img-col-3">
+            @*@for (int i = Model.Images.Count * 2 / 3; i < Model.Images.Count; i++)
+            {
+            <img style="width:100%; border-radius:5%;" class="img-responsive p-1" src="@Model.Images[i].Url" />
+            }*@
+        </div>
+    </div>
+</container>
+
+<script>
+
+    function addImage(url) {
+        let a = document.getElementById("img-col-1");
+        let b = document.getElementById("img-col-2");
+        let c = document.getElementById("img-col-3")
+        let cols = [a, b, c];
+        cols.sort(function(x, y) { return x.childElementCount - y.childElementCount })
+        console.debug(cols);
+        const img = document.createElement('img');
+        img.classList.add('img-fluid', 'p-2', 'imageshare-img');
+        img.src = url;
+        cols[0].appendChild(img);
+
+        //a.append("<img style='width:100%; border-radius:5%;' class='img-responsive p-1' src='" + url + "'/>");
+    }
+
+    $(document).ready(function() {
+
+    @for (int i = 0; i < Model.Images.Count; i++)
+    {
+        @:addImage('@Model.Images[i].Url');
+    }
+
+            Dropzone.autoDiscover = false;
+
+        $("#image-dropzone").dropzone({
+            method: "POST",
+            url: "images/upload",
+            paramName: "uploadFile",
+            maxFiles: 100,
+            thumbnailWidth: 100,
+            thumbnailHeight: 100,
+            success: function(file, response) {
+                var imgName = response;
+                file.previewElement.classList.add("dz-success","dz-preview-complete");
+                addImage(imgName);
+                console.log("Successfully uploaded :" + imgName);
+
+            },
+            error: function(file, response) {
+                file.previewElement.classList.add("dz-error");
+            }
+        });
+    });
+</script>

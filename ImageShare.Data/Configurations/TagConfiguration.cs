@@ -19,8 +19,8 @@ namespace ImageShare.Data.Configurations
                 .UsingEntity("ImageTag").ToTable("ImageTags");
             builder.HasMany(t => t.Albums).WithMany(g => g.Tags)
                 .UsingEntity("AlbumTag").ToTable("AlbumTags");
-            builder.HasMany(t => t.Collections).WithMany(c => c.Tags)
-                .UsingEntity("CollectionTag").ToTable("CollectionTags");
+            builder.HasMany(t => t.Libraries).WithMany(c => c.Tags)
+                .UsingEntity("LibraryTag").ToTable("LibraryTags");
 
         }
     }

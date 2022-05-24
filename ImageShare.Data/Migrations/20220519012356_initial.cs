@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ImageShare.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,7 +49,7 @@ namespace ImageShare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Collections",
+                name: "Libraries",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -59,7 +59,7 @@ namespace ImageShare.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Collections", x => x.Id);
+                    table.PrimaryKey("PK_Libraries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,51 +184,51 @@ namespace ImageShare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CollectionAlbums",
+                name: "LibraryAlbums",
                 columns: table => new
                 {
-                    AlbumsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CollectionsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    LibraryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AlbumId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CollectionAlbums", x => new { x.AlbumsId, x.CollectionsId });
+                    table.PrimaryKey("PK_LibraryAlbums", x => new { x.LibraryId, x.AlbumId });
                     table.ForeignKey(
-                        name: "FK_CollectionAlbums_Albums_AlbumsId",
-                        column: x => x.AlbumsId,
+                        name: "FK_LibraryAlbums_Albums_AlbumId",
+                        column: x => x.AlbumId,
                         principalTable: "Albums",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CollectionAlbums_Collections_CollectionsId",
-                        column: x => x.CollectionsId,
-                        principalTable: "Collections",
+                        name: "FK_LibraryAlbums_Libraries_LibraryId",
+                        column: x => x.LibraryId,
+                        principalTable: "Libraries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CollectionSubscribers",
+                name: "LibrarySubscribers",
                 columns: table => new
                 {
                     SubscriberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CollectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LibraryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     IsOwner = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CollectionSubscribers", x => new { x.CollectionId, x.SubscriberId });
+                    table.PrimaryKey("PK_LibrarySubscribers", x => new { x.LibraryId, x.SubscriberId });
                     table.ForeignKey(
-                        name: "FK_CollectionSubscribers_AppUsers_SubscriberId",
+                        name: "FK_LibrarySubscribers_AppUsers_SubscriberId",
                         column: x => x.SubscriberId,
                         principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CollectionSubscribers_Collections_CollectionId",
-                        column: x => x.CollectionId,
-                        principalTable: "Collections",
+                        name: "FK_LibrarySubscribers_Libraries_LibraryId",
+                        column: x => x.LibraryId,
+                        principalTable: "Libraries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -258,23 +258,23 @@ namespace ImageShare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CollectionTags",
+                name: "LibraryTags",
                 columns: table => new
                 {
-                    CollectionsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LibrariesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TagsTagText = table.Column<string>(type: "nvarchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CollectionTags", x => new { x.CollectionsId, x.TagsTagText });
+                    table.PrimaryKey("PK_LibraryTags", x => new { x.LibrariesId, x.TagsTagText });
                     table.ForeignKey(
-                        name: "FK_CollectionTags_Collections_CollectionsId",
-                        column: x => x.CollectionsId,
-                        principalTable: "Collections",
+                        name: "FK_LibraryTags_Libraries_LibrariesId",
+                        column: x => x.LibrariesId,
+                        principalTable: "Libraries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CollectionTags_Tags_TagsTagText",
+                        name: "FK_LibraryTags_Tags_TagsTagText",
                         column: x => x.TagsTagText,
                         principalTable: "Tags",
                         principalColumn: "TagText",
@@ -306,30 +306,6 @@ namespace ImageShare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CollectionImages",
-                columns: table => new
-                {
-                    CollectionsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImagesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CollectionImages", x => new { x.CollectionsId, x.ImagesId });
-                    table.ForeignKey(
-                        name: "FK_CollectionImages_Collections_CollectionsId",
-                        column: x => x.CollectionsId,
-                        principalTable: "Collections",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CollectionImages_Images_ImagesId",
-                        column: x => x.ImagesId,
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ImageTags",
                 columns: table => new
                 {
@@ -350,6 +326,30 @@ namespace ImageShare.Data.Migrations
                         column: x => x.TagsTagText,
                         principalTable: "Tags",
                         principalColumn: "TagText",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LibraryImages",
+                columns: table => new
+                {
+                    ImagesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LibrariesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LibraryImages", x => new { x.ImagesId, x.LibrariesId });
+                    table.ForeignKey(
+                        name: "FK_LibraryImages_Images_ImagesId",
+                        column: x => x.ImagesId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LibraryImages_Libraries_LibrariesId",
+                        column: x => x.LibrariesId,
+                        principalTable: "Libraries",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -391,26 +391,6 @@ namespace ImageShare.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CollectionAlbums_CollectionsId",
-                table: "CollectionAlbums",
-                column: "CollectionsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CollectionImages_ImagesId",
-                table: "CollectionImages",
-                column: "ImagesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CollectionSubscribers_SubscriberId",
-                table: "CollectionSubscribers",
-                column: "SubscriberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CollectionTags_TagsTagText",
-                table: "CollectionTags",
-                column: "TagsTagText");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Images_OwnerId",
                 table: "Images",
                 column: "OwnerId");
@@ -418,6 +398,26 @@ namespace ImageShare.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ImageTags_TagsTagText",
                 table: "ImageTags",
+                column: "TagsTagText");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LibraryAlbums_AlbumId",
+                table: "LibraryAlbums",
+                column: "AlbumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LibraryImages_LibrariesId",
+                table: "LibraryImages",
+                column: "LibrariesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LibrarySubscribers_SubscriberId",
+                table: "LibrarySubscribers",
+                column: "SubscriberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LibraryTags_TagsTagText",
+                table: "LibraryTags",
                 column: "TagsTagText");
         }
 
@@ -442,28 +442,28 @@ namespace ImageShare.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CollectionAlbums");
-
-            migrationBuilder.DropTable(
-                name: "CollectionImages");
-
-            migrationBuilder.DropTable(
-                name: "CollectionSubscribers");
-
-            migrationBuilder.DropTable(
-                name: "CollectionTags");
-
-            migrationBuilder.DropTable(
                 name: "ImageTags");
+
+            migrationBuilder.DropTable(
+                name: "LibraryAlbums");
+
+            migrationBuilder.DropTable(
+                name: "LibraryImages");
+
+            migrationBuilder.DropTable(
+                name: "LibrarySubscribers");
+
+            migrationBuilder.DropTable(
+                name: "LibraryTags");
 
             migrationBuilder.DropTable(
                 name: "Albums");
 
             migrationBuilder.DropTable(
-                name: "Collections");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "Libraries");
 
             migrationBuilder.DropTable(
                 name: "Tags");
