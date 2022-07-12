@@ -1,10 +1,8 @@
-﻿using ImageShare.Core.Models;
+﻿using System.Diagnostics;
 using ImageShare.Services;
 using ImageShare.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace ImageShare.Web.Controllers;
 

@@ -1,13 +1,12 @@
-﻿using ImageShare.Core;
+﻿using Azure;
+using ImageShare.Core;
 using ImageShare.Core.Models;
 using ImageShare.Data;
 using ImageShare.Services;
+using ImageShare.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
 
 namespace ImageShare.Web.Controllers
 {
@@ -18,36 +17,66 @@ namespace ImageShare.Web.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ImageService _imageService;
         private readonly LibraryService _libraryService;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserService _userService;
         public ImagesController(ILogger<ImagesController> logger, ApplicationDbContext context,
-            ImageService imageService, UserManager<AppUser> userManager, LibraryService libraryService)
+            ImageService imageService, UserService userService, LibraryService libraryService)
         {
             _logger = logger;
             _context = context;
             _imageService = imageService;
             _libraryService = libraryService;
-            _userManager = userManager;
+            _userService = userService;
+        }
+
+        public IActionResult Index(Guid libraryId, Guid albumId)
+        {
+            var vm = new ImagesViewModel
+            {
+                LibraryId = libraryId,
+                AlbumId = albumId
+            };
+            return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Details(Guid id)
+        {
+            Image? img = _context.Images.Find(id);
+            if (img == null) return NotFound();
+
+            ImageViewModel vm = new()
+            {
+                ImageId = img.Id,
+                ImageUrl = img.Url,
+                Title = img.Title,
+                Description = img.Description ?? String.Empty,
+                Tags = img.Tags,
+                Libraries = img.Libraries,
+                Albums = img.Albums,
+                IsOwner = img.Owner == _userService.GetCurrentUserAsync().Result
+            };
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile uploadFile, Guid libraryId, Guid albumId)
+        public async Task<IResult> Upload(IFormFile uploadFile, Guid libraryId, Guid albumId)
         {
             Library? library = _context.Libraries.Find(libraryId);
-            if (library == null) return new StatusCodeResult(StatusCodes.Status424FailedDependency);
+            if (library == null) return Results.Problem("No library selected",null,StatusCodes.Status406NotAcceptable);
             Album? album = _context.Albums.Find(albumId);
-
             Image image = new()
             {
-                Owner = await _userManager.GetUserAsync(User),
+                Owner = await _userService.GetCurrentUserAsync(),
                 Title = uploadFile.FileName,
                 Created = DateTime.Now,
             };
+            
             image = await _imageService.UploadAsync(image, uploadFile.OpenReadStream());
             image = await _imageService.AddAsync(image, library, album);
             _logger.LogInformation("Image added:\n\tId:{id}\n\tTitle:{title}\n\tBlobName:{blobName}",
                 image.Id, image.Title, image.BlobName);
 
-            return Ok(image.Url);
+            return Results.Ok(new { id = image.Id, url = image.Url });
 
         }
     }

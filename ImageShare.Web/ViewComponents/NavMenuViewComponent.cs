@@ -1,8 +1,6 @@
-﻿using ImageShare.Core.Models;
-using ImageShare.Data;
+﻿using ImageShare.Data;
 using ImageShare.Services;
 using ImageShare.Web.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ImageShare.Web.ViewComponents

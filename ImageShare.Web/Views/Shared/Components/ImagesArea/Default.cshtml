@@ -1,62 +1,70 @@
 ﻿@using ImageShare.Core.Models
 @model ImageShare.Web.Models.ImagesViewModel
-
-<form asp-action="Upload" class="dropzone" style="margin-top:20px;" id="image-dropzone" asp-controller="Images" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="libraryId" value="@Model.LibraryId" />
-    <input type="hidden" name="albumId" value="@Model.AlbumId" />
-    <div>
-        <div class="dz-default dz-message">
-            Drop image(s) here.
-        </div>
+<div class="row">
+    <div class="col-3">
+        @if (Model.Library != null)
+        {
+            <h3>@Model.Library.Title</h3>
+        }
+        @if (Model.Album != null)
+        {
+            <h4>@Model.Album.Title</h4>
+        }
     </div>
-</form>
-<container>
-    <div class="row">
+
+    <div class="col-9">
+        <form asp-action="Upload" class="dropzone" style="margin-top:20px;" id="image-dropzone" asp-controller="Images" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="libraryId" value="@Model.LibraryId" />
+            <input type="hidden" name="albumId" value="@Model.AlbumId" />
+            <div>
+                <div class="dz-default dz-message">
+                    Drop image(s) here.
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <div class="row pb-3" style="margin-bottom: 120px;">
         <div class="col-sm-4 p-1" id="img-col-1">
-            @* @for (int i = 0; i < Model.Images.Count / 3; i++)
-            {
-            <img style="width:100%; border-radius:5%;" class="img-responsive p-1" src="@Model.Images[i].Url" />
-            }*@
         </div>
         <div class="col-sm-4 p-1" id="img-col-2">
-            @*@for (int i = Model.Images.Count / 3; i < Model.Images.Count * 2 / 3; i++)
-            {
-            <img style="width:100%; border-radius:5%;" class="img-responsive p-1" src="@Model.Images[i].Url" />
-            }*@
         </div>
         <div class="col-sm-4 p-1" id="img-col-3">
-            @*@for (int i = Model.Images.Count * 2 / 3; i < Model.Images.Count; i++)
-            {
-            <img style="width:100%; border-radius:5%;" class="img-responsive p-1" src="@Model.Images[i].Url" />
-            }*@
         </div>
     </div>
-</container>
 
 <script>
 
-    function addImage(url) {
+    function addImage(id, url) {
         let a = document.getElementById("img-col-1");
         let b = document.getElementById("img-col-2");
         let c = document.getElementById("img-col-3")
         let cols = [a, b, c];
-        cols.sort(function(x, y) { return x.childElementCount - y.childElementCount })
-        console.debug(cols);
-        const img = document.createElement('img');
-        img.classList.add('img-fluid', 'p-2', 'imageshare-img');
-        img.src = url;
-        cols[0].appendChild(img);
+        cols.sort(function (x, y) { return x.childElementCount - y.childElementCount })
 
-        //a.append("<img style='width:100%; border-radius:5%;' class='img-responsive p-1' src='" + url + "'/>");
+        console.debug("id: " + id + ",\nurl: " + url);
+
+        const link = document.createElement('a');
+        link.setAttribute("href", "images/details/" + id);
+
+        const img = document.createElement('img');
+        img.classList.add('img-fluid', 'is-imgcollection-img');
+        img.src = url;
+
+        cols[0].appendChild(link);
+        link.appendChild(img);
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
+        // add images
     @for (int i = 0; i < Model.Images.Count; i++)
     {
-        @:addImage('@Model.Images[i].Url');
+        @:addImage('@Model.Images[i].Id', '@Model.Images[i].Url');
     }
 
+            // Dropzone
             Dropzone.autoDiscover = false;
 
         $("#image-dropzone").dropzone({
@@ -66,14 +74,27 @@
             maxFiles: 100,
             thumbnailWidth: 100,
             thumbnailHeight: 100,
-            success: function(file, response) {
-                var imgName = response;
-                file.previewElement.classList.add("dz-success","dz-preview-complete");
-                addImage(imgName);
-                console.log("Successfully uploaded :" + imgName);
+            uploadprogress: function (file, progress, bytesSent) {
+                if (file.previewElement) {
+                    console.log("file" + file + " " + progress + "% (" + bytesSent + "/" + file.size + " bytes)");
+                    for (let node of file.previewElement.querySelectorAll(
+                        "[data-dz-uploadprogress]"
+                    )) {
+                        node.nodeName === "PROGRESS"
+                            ? (node.value = progress)
+                            : (node.style.width = `${progress}%`);
+                    }
+                }
+            },
+            success: function (file, response) {
+                file.previewElement.classList.add("dz-success", "dz-preview-complete");
+                addImage(response.value.id, response.value.url);
+                console.log(response);
+                console.log("Successfully uploaded [" + response.id + "] : [" + response.url + "]");
 
             },
-            error: function(file, response) {
+            error: function (file, response) {
+                console.log(response);
                 file.previewElement.classList.add("dz-error");
             }
         });

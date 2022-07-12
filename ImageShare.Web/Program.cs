@@ -1,13 +1,11 @@
+using Azure.Identity;
 using ImageShare.Core.Models;
 using ImageShare.Data;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using ImageShare.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
-using Azure.Storage;
-using Azure.Identity;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using ImageShare.Services;
 
 namespace ImageShare.Web;
 public static class Program
@@ -72,7 +70,7 @@ public static class Program
         });
 
         builder.Services.AddControllersWithViews();
-       // builder.Services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+        // builder.Services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
         builder.Services.AddScoped<ImageService>();
         builder.Services.AddScoped<LibraryService>();
         builder.Services.AddScoped<UserService>();

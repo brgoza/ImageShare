@@ -1,5 +1,5 @@
-﻿using ImageShare.Core.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using ImageShare.Core.Models;
 
 namespace ImageShare.Core
 {
@@ -16,7 +16,7 @@ namespace ImageShare.Core
 
         [Required, StringLength(256)]
         public string BlobName { get; set; } = null!;
-        
+
         [StringLength(2048)]
         public string? Description { get; set; }
 

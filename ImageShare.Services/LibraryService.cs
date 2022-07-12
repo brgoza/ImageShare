@@ -2,11 +2,6 @@
 using ImageShare.Core.Models;
 using ImageShare.Data;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageShare.Services
 {
@@ -25,7 +20,7 @@ namespace ImageShare.Services
             return _context.Libraries.Find(libraryId);
         }
 
-        public Library CreateLibrary(AppUser owner, string title, string description, List<string> tagTexts)
+        public Library Create(AppUser owner, string title, string description, List<string> tagTexts)
         {
             Library newLib = new Library
             {

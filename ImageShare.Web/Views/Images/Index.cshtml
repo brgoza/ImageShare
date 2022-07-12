@@ -1,0 +1,6 @@
+﻿@using ImageShare.Core.Models
+@model ImageShare.Web.Models.ImagesViewModel
+
+@await Component.InvokeAsync("ImagesArea", new {
+    libraryId = Model.LibraryId, albumId = Model.AlbumId })
+

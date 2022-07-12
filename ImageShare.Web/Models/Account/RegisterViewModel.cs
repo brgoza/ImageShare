@@ -7,12 +7,12 @@ namespace ImageShare.Web.Models
         [Required]
         [EmailAddress]
         [Display(Name = "Email address")]
-        public string? Email { get; set; } 
+        public string? Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string? Password { get; set; } 
+        public string? Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ImageShare.Core.Models
+﻿namespace ImageShare.Core.Models
 {
     public class AlbumSubscriber
     {
+        public AlbumSubscriber(AppUser subscriber, Album album, bool isAdmin, bool isOwner)
+            => (Subscriber, Album, IsAdmin, IsOwner) = (subscriber, album, isAdmin, isOwner);
+
         public virtual AppUser Subscriber { get; set; } = null!;
         public Guid SubscriberId { get; set; }
         public virtual Album Album { get; set; } = null!;

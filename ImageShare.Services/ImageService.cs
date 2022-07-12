@@ -27,9 +27,10 @@ public class ImageService
         try
         {
             await blobClient.UploadAsync(stream);
+            image.Url = blobClient.Uri.ToString();
             _logger.LogInformation("Successfully Uploaded:\t{title}\nBlobName:\t{blobname}\nUrl:\t{url}",
                 image.Title, image.BlobName, image.Url);
-            image.Url = blobClient.Uri.ToString();
+
             return image;
         }
         catch (RequestFailedException ex)

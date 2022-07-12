@@ -1,0 +1,28 @@
+﻿@model ImageShare.Web.Models.ImageViewModel
+
+<div class="row d-flex align-items-center mb-3">
+    <div class="col-1" >
+        <a class="btn p-0"  data-bs-toggle="offcanvas" href="#offcanvas-options" role="button" aria-controls="offcanvasExample">
+            <img src="~/images/right-arrow.png" class="img-fluid offcanvas-toggle"></>
+        </a>
+    </div>
+
+    <div class="col-11">
+        <img src="@Model.ImageUrl" class="img-fluid"/>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-options" aria-labelledby="offcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasLabel">@Model.Title</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        @Model.Description
+        @String.Join(',', Model.Tags.Select(t=>t.TagText));
+        @if (Model.IsOwner)
+        {
+            <a>...</a>
+        }      
+    </div>
+</div>

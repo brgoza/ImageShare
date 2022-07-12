@@ -11,20 +11,44 @@ main {
     overflow-y: hidden;
 }
 
-.side-nav-menu {
-    font-size-adjust: .8;
-    color: aliceblue;
-    background-image: url('images/bg-00.png');
-    background-repeat: repeat;
-    border-right: 4px groove black;
-}
-
 .bi {
     vertical-align: -.125em;
     pointer-events: none;
     fill: currentColor;
 }
 
+.navbar {
+    background-image: url(/images/bg-00.png);
+    background-repeat: repeat;
+}
+.nav-container {
+}
+
+.navbar-menu-header {
+    height: 80px;
+    font-family: permanent-marker, sans-serif;
+    font-size: 2em;
+    transition: ease;
+    color: aliceblue;
+    box-shadow: 10px 10px 15px blue;
+    border: groove black;
+}
+
+a.navbar-brand {
+    height: 80%;
+    padding-right: 30px;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    color: aliceblue;
+    font-family: permanent-marker, sans-serif;
+    font-size: 3rem;
+    text-shadow: 10px 10px 15px black;
+}
+
+.nav-link {
+    color: aliceblue;
+}
 .dropdown {
     transition: all 1s ease-in-out;
 }

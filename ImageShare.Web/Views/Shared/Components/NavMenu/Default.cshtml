@@ -3,35 +3,48 @@
 @model ImageShare.Web.Models.NavMenuViewModel
 
 <nav class="navbar sticky-top navbar-expand-md navbar-dark navbar-toggleable-sm border-bottom box-shadow">
-    <div class="container-fluid">
+    <div class="container-fluid nav-container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-            <img src="/images//logo-md.png" alt="" class="d-inline-block align-text-top">
-            ImageShare
+            <img src="/images/logo-md.png" class="image-fluid" />
         </a>
         @if (Model.IsSignedIn)
         {
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-">
-                <li class="dropdown">
-
+            <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                <div class="dropdown">
                     <button class="navbar-menu-header btn btn-primary dropdown-toggle" type="button" id="libraries-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                         Libraries
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="libraries-dropdown-btn">
+                    <div class="dropdown-menu" aria-labelledby="libraries-dropdown-btn">
                         @for (int i = 0; i < Model.Libraries.Count; i++)
                         {
-                            <li><a asp-action="Index" asp-controller="Home" asp-route-libraryId="@Model.Libraries[i].Id" class="dropdown-item">@Model.Libraries[i].Title</a></li>
-
+                            <div><a asp-action="Index" asp-controller="Home" asp-route-libraryId="@Model.Libraries[i].Id" class="dropdown-item">@Model.Libraries[i].Title</a></div>
                         }
-                        <li><hr /></li>
-                        <li><a asp-action="Create" asp-controller="Libraries" class="dropdown-item">New...</a></li>
-                    </ul>
-                </li>
+                        <hr />
+                        <div><a asp-action="Create" asp-controller="Libraries" class="dropdown-item">New...</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                <div class="dropdown">
+                    <button class="navbar-menu-header btn btn-primary dropdown-toggle" type="button" id="albums-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                        Albums
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="albums-dropdown-btn">
+                        @for (int i = 0; i < Model.Albums.Count; i++)
+                        {
+                            <div><a asp-action="Index" asp-controller="Home" asp-route-libraryId="@Model.Libraries[i].Id" class="dropdown-item">@Model.Libraries[i].Title</a></div>
+                        }
+                        <hr />
+                        <div><a asp-action="Create" asp-controller="Albums" class="dropdown-item">New...</a></div>
+                    </div>
+                </div>
+            </div>
 
-            </ul>
+
         }
         <partial name="_LoginPartial" />
     </div>
